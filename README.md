@@ -1,0 +1,3 @@
+# doublecmd
+
+The doublecmd package
