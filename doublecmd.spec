@@ -2,13 +2,15 @@
 
 Name:           doublecmd
 Version:        0.9.6
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross platform open source file manager with two panels
 
+# Full licenses description in licensecheck.txt file
 License:        GPLv2+ and LGPLv2+ and Expat and MPLv1.1 and MPLv2.0 and ASL 2.0 and BSD and Expat and zlib
 URL:            http://doublecmd.sourceforge.net
 Source0:        https://sourceforge.net/projects/%{name}/files/Double%20Commander%20Source/%{name}-%{version}-src.tar.gz
 Source1:        %{name}-qt.desktop
+Source2:        licensecheck.txt
 
 BuildRequires:  fpc >= 2.6.0
 BuildRequires:  fpc-src
@@ -45,12 +47,12 @@ panels side by side.
 It is inspired by Total Commander and features some new ideas.
 
 %package        qt
-Summary:        Twin-panel (commander-style) file manager (Qt4)
+Summary:        Twin-panel (commander-style) file manager (Qt5)
 Group:          File tools
 Requires:       %{name}-common%{?_isa} = %{version}-%{release}
 
 %description    qt
-Double Commander QT4 is a cross platform open source file manager with two
+Double Commander QT5 is a cross platform open source file manager with two
 panels side by side.
 It is inspired by Total Commander and features some new ideas.
 
@@ -66,6 +68,8 @@ Common files for Double Commander GTK2 and Qt.
 %prep
 %autosetup -p0
 chmod +x install/linux/install-help.sh
+# Sure to not use libbz2 and libssh2 bundling
+rm -rf libraries
 
 
 %build
@@ -81,6 +85,7 @@ install -pm 0755 ./%{name}-qt %{buildroot}%{_libdir}/%{name}/%{name}-qt
 ln -s ../%{_lib}/%{name}/%{name}-qt %{buildroot}%{_bindir}/%{name}-qt
 install -pm 0644 ./%{name}-qt.zdli %{buildroot}%{_libdir}/%{name}/%{name}-qt.zdli
 desktop-file-install %{SOURCE1}
+cp %{SOURCE2} .
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
@@ -100,7 +105,7 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_datadir}/applications/%{name}-qt.desktop
 
 %files common
-%doc doc/changelog.txt doc/README.txt
+%doc doc/changelog.txt doc/README.txt licensecheck.txt
 %license doc/COPYING.LGPL.txt doc/COPYING.modifiedLGPL.txt doc/COPYING.txt
 %exclude %{_libdir}/%{name}/%{name}
 %exclude %{_libdir}/%{name}/%{name}-qt
@@ -116,6 +121,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_datadir}/polkit-1/actions/org.doublecmd.root.policy
 
 %changelog
+* Fri Oct 18 2019 Vasiliy N. Glazov <vascom2@gmail.com> 0.9.6-3
+- Added licensecheck.txt file
+
 * Tue Oct 15 2019 Vasiliy N. Glazov <vascom2@gmail.com> 0.9.6-2
 - Corrected license and spec cleanup
 
