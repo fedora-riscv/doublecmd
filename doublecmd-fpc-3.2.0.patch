@@ -1,0 +1,121 @@
+Index: src/filesources/multilist/umultilistfilesource.pas
+===================================================================
+--- src/filesources/multilist/umultilistfilesource.pas	(revision 9387)
++++ src/filesources/multilist/umultilistfilesource.pas	(revision 9388)
+@@ -58,6 +58,7 @@
+     }
+     FFileSource: IFileSource;
+ 
++  protected
+     function GetFileList: TFileTree;
+     function GetFileSource: IFileSource;
+ 
+Index: src/fsyncdirsdlg.pas
+===================================================================
+--- src/fsyncdirsdlg.pas	(revision 9387)
++++ src/fsyncdirsdlg.pas	(revision 9388)
+@@ -1023,7 +1023,7 @@
+ procedure TfrmSyncDirsDlg.InitVisibleItems;
+ var
+   i, j: Integer;
+-  filter: record
++  AFilter: record
+     copyLeft, copyRight, eq, neq: Boolean;
+     dup, single: Boolean;
+   end;
+@@ -1037,7 +1037,7 @@
+     FVisibleItems.CaseSensitive := FileNameCaseSensitive;
+   end;
+   { init filter }
+-  with filter do
++  with AFilter do
+   begin
+     copyLeft := sbCopyLeft.Down;
+     copyRight := sbCopyRight.Down;
+@@ -1055,14 +1055,14 @@
+       begin
+         { check filter }
+         r := TFileSyncRec(Objects[j]);
+-        if ((Assigned(r.FFileL) <> Assigned(r.FFileR)) and filter.single or
+-           (Assigned(r.FFileL) = Assigned(r.FFileR)) and filter.dup)
++        if ((Assigned(r.FFileL) <> Assigned(r.FFileR)) and AFilter.single or
++           (Assigned(r.FFileL) = Assigned(r.FFileR)) and AFilter.dup)
+            and
+-           ((r.FState = srsCopyLeft) and filter.copyLeft or
+-            (r.FState = srsCopyRight) and filter.copyRight or
+-            (r.FState = srsDeleteRight) and filter.copyLeft or
+-            (r.FState = srsEqual) and filter.eq or
+-            (r.FState = srsNotEq) and filter.neq or
++           ((r.FState = srsCopyLeft) and AFilter.copyLeft or
++            (r.FState = srsCopyRight) and AFilter.copyRight or
++            (r.FState = srsDeleteRight) and AFilter.copyLeft or
++            (r.FState = srsEqual) and AFilter.eq or
++            (r.FState = srsNotEq) and AFilter.neq or
+             (r.FState = srsUnknown))
+         then
+           FVisibleItems.AddObject(Strings[j], Objects[j]);
+Index: src/filesources/ufilesource.pas
+===================================================================
+--- src/filesources/ufilesource.pas	(revision 9320)
++++ src/filesources/ufilesource.pas	(revision 9321)
+@@ -285,8 +285,8 @@
+        This is used if a file source has any internal cache or file list.
+        Overwrite DoReload in descendant classes.
+     }
+-    procedure Reload(const PathsToReload: TPathsArray); virtual;
+-    procedure Reload(const PathToReload: String);
++    procedure Reload(const PathsToReload: TPathsArray); virtual; overload;
++    procedure Reload(const PathToReload: String); overload;
+
+     procedure AddReloadEventListener(FunctionToCall: TFileSourceReloadEventNotify);
+     procedure RemoveReloadEventListener(FunctionToCall: TFileSourceReloadEventNotify);
+Index: src/platform/unix/upipeserver.pas
+===================================================================
+--- src/platform/unix/upipeserver.pas	(revision 9320)
++++ src/platform/unix/upipeserver.pas	(revision 9321)
+@@ -50,6 +50,7 @@
+     FFileName: String;
+     FStream: TFileStream;
+   private
++    procedure OwnerReadMessage;
+     procedure Handler(Sender: TObject);
+   Public
+     Constructor Create(AOWner : TSimpleIPCServer); override;
+@@ -74,9 +75,14 @@
+
+ { TPipeServerComm }
+
++procedure TPipeServerComm.OwnerReadMessage;
++begin
++  Owner.ReadMessage;
++end;
++
+ procedure TPipeServerComm.Handler(Sender: TObject);
+ begin
+-  TThread.Synchronize(nil, @Owner.ReadMessage);
++  TThread.Synchronize(nil, @OwnerReadMessage);
+ end;
+
+ constructor TPipeServerComm.Create(AOWner: TSimpleIPCServer);
+Index: src/platform/uuniqueinstance.pas
+===================================================================
+--- src/platform/uuniqueinstance.pas	(revision 9320)
++++ src/platform/uuniqueinstance.pas	(revision 9321)
+@@ -5,7 +5,7 @@
+ interface
+
+ uses
+-  Classes, SysUtils, SimpleIPC, uCmdLineParams, RegExpr;
++  Classes, SysUtils, SimpleIPC, uCmdLineParams;
+
+ type
+
+@@ -72,7 +72,7 @@
+   {$ELSEIF DEFINED(UNIX)}
+   ipc, baseunix, uPipeServer,
+   {$ENDIF}
+-  Forms, StrUtils, FileUtil, uGlobs, uDebug;
++  Forms, StrUtils, FileUtil, uRegExprA, uGlobs, uDebug;
+
+ {$IF DEFINED(DARWIN)}
+ const
