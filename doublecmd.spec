@@ -1,8 +1,8 @@
 %global debug_package %{nil}
 
 Name:           doublecmd
-Version:        0.9.10
-Release:        3%{?dist}
+Version:        1.0.2
+Release:        1%{?dist}
 Summary:        Cross platform open source file manager with two panels
 
 # Full licenses description in licensecheck.txt file
@@ -121,6 +121,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_datadir}/polkit-1/actions/org.doublecmd.root.policy
 
 %changelog
+* Mon Dec 13 2021 Vasiliy N. Glazov <vascom2@gmail.com> - 1.0.2-1
+- Update to 1.0.2
+
 * Wed Jul 21 2021 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.10-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
