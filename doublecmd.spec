@@ -2,11 +2,11 @@
 
 Name:           doublecmd
 Version:        1.0.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Cross platform open source file manager with two panels
 
 # Full licenses description in licensecheck.txt file
-License:        GPLv2+ and LGPLv2+ and Expat and MPLv1.1 and MPLv2.0 and ASL 2.0 and BSD and Expat and zlib
+License:        GPLv2+ and LGPLv2+ and MIT and MPLv1.1 and MPLv2.0 and ASL 2.0 and BSD and zlib
 URL:            http://doublecmd.sourceforge.net
 Source0:        https://sourceforge.net/projects/%{name}/files/Double%20Commander%20Source/%{name}-%{version}-src.tar.gz
 Source1:        %{name}-qt.desktop
@@ -121,6 +121,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_datadir}/polkit-1/actions/org.doublecmd.root.policy
 
 %changelog
+* Wed Jan 05 2022 Vasiliy N. Glazov <vascom2@gmail.com> - 1.0.2-2
+- Fix license
+
 * Mon Dec 13 2021 Vasiliy N. Glazov <vascom2@gmail.com> - 1.0.2-1
 - Update to 1.0.2
 
