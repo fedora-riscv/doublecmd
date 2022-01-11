@@ -1,8 +1,8 @@
 %global debug_package %{nil}
 
 Name:           doublecmd
-Version:        1.0.2
-Release:        2%{?dist}
+Version:        1.0.3
+Release:        1%{?dist}
 Summary:        Cross platform open source file manager with two panels
 
 # Full licenses description in licensecheck.txt file
@@ -121,6 +121,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_datadir}/polkit-1/actions/org.doublecmd.root.policy
 
 %changelog
+* Tue Jan 11 2022 Vasiliy N. Glazov <vascom2@gmail.com> - 1.0.3-1
+- Update to 1.0.3
+
 * Wed Jan 05 2022 Vasiliy N. Glazov <vascom2@gmail.com> - 1.0.2-2
 - Fix license
 
