@@ -2,7 +2,7 @@
 
 Name:           doublecmd
 Version:        1.1.9
-Release:        1%{?dist}
+Release:        1.rv64%{?dist}
 Summary:        Cross platform open source file manager with two panels
 
 # Full licenses description in licensecheck.txt file
@@ -32,7 +32,7 @@ BuildRequires:  pkgconfig(pango)
 BuildRequires:  desktop-file-utils
 BuildRequires:  libappstream-glib
 
-ExclusiveArch:  %{ix86} x86_64
+ExclusiveArch:  %{ix86} x86_64 riscv64
 
 %description
 Double Commander GTK2 is a cross platform open source file manager with two
